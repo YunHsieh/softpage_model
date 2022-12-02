@@ -10,5 +10,16 @@ python -b venv env
 
 Start the first time
 ```bash
-poetry install
+docker-compose build
+docker-compose up -d
+
+docker-compose run --rm -v $(pwd):/softpage/ web bash
+python manage.py migrate
+```
+
+Update model into db
+```
+docker-compose run --rm -v $(pwd):/softpage/ web bash
+python manage.py makemigrations
+python manage.py migrate
 ```
