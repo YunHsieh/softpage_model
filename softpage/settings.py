@@ -28,10 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'account.CustomUser'
 
 # Application definition
-
 INSTALLED_APPS = [
+    # my applications
+    'applications.account',
+    'applications.soft_essay',
 
     # basic app
     'django.contrib.admin',
