@@ -18,5 +18,5 @@ COPY poetry.lock pyproject.toml /softpage/
 RUN pip install --upgrade pip \
     && pip install "poetry==1.2.2" \
     && poetry config virtualenvs.create false \
-    && poetry install
+    && poetry install --no-root
 COPY . /softpage/
