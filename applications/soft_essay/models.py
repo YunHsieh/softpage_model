@@ -13,12 +13,11 @@ class Softessay_Topic(models.Model):
     )
     name = models.CharField(
         max_length=256,
-        db_index=True,
     )
-    create_time = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
     )
-    update_time = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
     )
 
@@ -26,8 +25,8 @@ class Softessay_Topic(models.Model):
         indexes = [
             # this is Django 4.0 newest useage
             models.Index(fields=['name']),
-            models.Index(fields=['create_time']),
-            models.Index(fields=['update_time']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_topic'
 
@@ -40,20 +39,19 @@ class Softessay_Tag(models.Model):
     )
     name = models.CharField(
         max_length=256,
-        db_index=True,
     )
-    create_time = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
     )
-    update_time = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
     )
 
     class Meta:
         indexes = [
             models.Index(fields=['name']),
-            models.Index(fields=['create_time']),
-            models.Index(fields=['update_time']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_tag'
 
@@ -105,17 +103,17 @@ class Softessay_Essay(models.Model):
         null=True,
         blank=True,
     )
-    create_time = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
     )
-    update_time = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
     )
 
     class Meta:
         indexes = [
-            models.Index(fields=['create_time']),
-            models.Index(fields=['update_time']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_essay'
 
@@ -139,17 +137,17 @@ class Softessay_Body(models.Model):
         null=True,
         blank=True,
     )
-    create_time = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
     )
-    update_time = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
     )
 
     class Meta:
         indexes = [
-            models.Index(fields=['create_time']),
-            models.Index(fields=['update_time']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_body'
 
@@ -173,16 +171,16 @@ class Softessay_Comment(models.Model):
         null=True,
         blank=True,
     )
-    create_time = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
     )
-    update_time = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
     )
 
     class Meta:
         indexes = [
-            models.Index(fields=['create_time']),
-            models.Index(fields=['update_time']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_comment'
