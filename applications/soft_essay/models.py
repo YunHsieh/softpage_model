@@ -1,8 +1,8 @@
 import uuid
 
 from django.db import models
+from django.db.models import JSONField
 from django.conf import settings
-from django.contrib.postgres.fields import ArrayField
 
 
 class Softessay_Topic(models.Model):
@@ -22,6 +22,9 @@ class Softessay_Topic(models.Model):
     )
 
     class Meta:
+        unique_together = [
+            ('name'),
+        ]
         indexes = [
             # this is Django 4.0 newest useage
             models.Index(fields=['name']),
@@ -48,6 +51,9 @@ class Softessay_Tag(models.Model):
     )
 
     class Meta:
+        unique_together = [
+            ('name'),
+        ]
         indexes = [
             models.Index(fields=['name']),
             models.Index(fields=['created_at']),
@@ -68,24 +74,20 @@ class Softessay_Essay(models.Model):
     )
     version = models.CharField(
         max_length=32,
+        null=True,
+        blank=True,
     )
     content = models.TextField()
     is_published = models.BooleanField(
-        max_length=256,
+        default=True,
     )
     is_deleted = models.BooleanField(
-        max_length=256,
         default=False,
     )
-    sequence = ArrayField(
-        models.CharField(
-            max_length=32,
-        ),
-        size=128,
-    )
-    tag = models.ForeignKey(
+    order_seq = JSONField()
+    tag = models.ManyToManyField(
         Softessay_Tag, 
-        on_delete=models.PROTECT,
+        through='EssayTag',
         null=True,
         blank=True,
     )
@@ -111,11 +113,23 @@ class Softessay_Essay(models.Model):
     )
 
     class Meta:
+        unique_together = [
+            ('title', 'author', 'forker')
+        ]
         indexes = [
             models.Index(fields=['created_at']),
             models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_essay'
+
+
+class EssayTag(models.Model):
+    id = models.AutoField(primary_key=True)
+    essay = models.ForeignKey(Softessay_Essay, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Softessay_Tag, on_delete=models.CASCADE)
+        
+    class Meta:
+        db_table = 'essay_x_tag'
 
 
 class Softessay_Body(models.Model):
@@ -124,7 +138,7 @@ class Softessay_Body(models.Model):
         default=uuid.uuid4, 
         editable=False,
     )
-    parent_body = models.ForeignKey(
+    last_version = models.ForeignKey(
         'self', 
         on_delete=models.SET_NULL,
         null=True,
@@ -158,13 +172,19 @@ class Softessay_Comment(models.Model):
         default=uuid.uuid4, 
         editable=False,
     )
-    parent_body = models.ForeignKey(
+    last_comment = models.ForeignKey(
         'self', 
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
     comment = models.TextField()
+    body = models.ForeignKey(
+        Softessay_Body, 
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     essay = models.ForeignKey(
         Softessay_Essay, 
         on_delete=models.SET_NULL,
