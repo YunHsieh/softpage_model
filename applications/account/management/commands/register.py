@@ -12,8 +12,8 @@ class Command(BaseCommand):
     help = 'Create the new fake account'
 
     def add_arguments(self, parser):
-        parser.add_argument('username', nargs='+', type=str)
-        parser.add_argument('password', nargs='+', type=str)
+        parser.add_argument('username', type=str)
+        parser.add_argument('password', type=str)
 
     def handle(self, *args, **options):
         username, password = options['username'], options['password']
