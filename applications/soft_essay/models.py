@@ -22,8 +22,8 @@ class Softessay_Topic(models.Model):
     )
 
     class Meta:
-        unique_together = [
-            ('name'),
+        constraints = [
+            models.UniqueConstraint(fields=['name'], name='topic unique name')
         ]
         indexes = [
             # this is Django 4.0 newest useage
@@ -51,8 +51,8 @@ class Softessay_Tag(models.Model):
     )
 
     class Meta:
-        unique_together = [
-            ('name'),
+        constraints = [
+            models.UniqueConstraint(fields=['name'], name='tag unique name')
         ]
         indexes = [
             models.Index(fields=['name']),
@@ -113,8 +113,11 @@ class Softessay_Essay(models.Model):
     )
 
     class Meta:
-        unique_together = [
-            ('title', 'author', 'forker')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author', 'forker'], 
+                name='unique essay by author'
+            )
         ]
         indexes = [
             models.Index(fields=['created_at']),
