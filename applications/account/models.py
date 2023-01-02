@@ -6,6 +6,8 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     email = models.EmailField(unique=True)
+    email_verified = models.BooleanField(default=False)
+    avatar = models.TextField(null=True, blank=True)
     REQUIRED_FIELDS = ['username']
 
     class Meta(AbstractUser.Meta):
@@ -17,19 +19,18 @@ class OutstandingToken(models.Model):
         primary_key=True, 
         serialize=False,
     )
+    issuer = models.CharField(
+        max_length=512,
+        null=True, 
+        blank=True,
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True,
     )
-
-    jti = models.CharField(
-        unique=True, 
-        max_length=255,
-    )
     token = models.TextField()
-
     created_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField()
 
@@ -38,10 +39,7 @@ class OutstandingToken(models.Model):
         ordering = ('user',)
 
     def __str__(self):
-        return "Token for {} ({})".format(
-            self.user,
-            self.jti,
-        )
+        return self.user
 
 
 class BlacklistedToken(models.Model):
@@ -56,6 +54,7 @@ class BlacklistedToken(models.Model):
         return f"Blacklisted token for {self.token.user}"
 
 
+# TODO: verify the email
 # class Authemail_verification(models.Model):
 #     code = models.CharField(
 #         max_length=64,

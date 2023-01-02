@@ -6,14 +6,14 @@ from .models import BlacklistedToken, OutstandingToken
 
 class OutstandingTokenAdmin(admin.ModelAdmin):
     list_display = (
-        "jti",
+        "issuer",
         "user",
         "created_at",
         "expires_at",
     )
     search_fields = (
         "user__id",
-        "jti",
+        "issuer",
     )
     ordering = ("user",)
 
