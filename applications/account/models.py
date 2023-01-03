@@ -8,6 +8,10 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     email_verified = models.BooleanField(default=False)
     avatar = models.TextField(null=True, blank=True)
+    is_superuser = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=128, null=True, blank=True)
+    last_name = models.CharField(max_length=128, null=True, blank=True)
+    password = models.CharField(max_length=128, null=True, blank=True)
     REQUIRED_FIELDS = ['username']
 
     class Meta(AbstractUser.Meta):
