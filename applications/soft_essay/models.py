@@ -92,7 +92,6 @@ class Softessay_Essay(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.PROTECT,
-        related_name='author',
         null=True,
         blank=True,
     )
@@ -125,6 +124,8 @@ class Softessay_Essay_History(models.Model):
     )
     essay = models.ForeignKey(
         Softessay_Essay,
+        null=True,
+        blank=True,
         on_delete=models.SET_NULL,
     )
     comment = models.CharField(
@@ -154,7 +155,6 @@ class Softessay_Essay_History(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.PROTECT,
-        related_name='author',
         null=True,
         blank=True,
     )
@@ -192,18 +192,12 @@ class Softessay_Body(models.Model):
         default=uuid.uuid4, 
         editable=False,
     )
-    last_version = models.ForeignKey(
-        'self', 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
     content = models.TextField()
     essay = models.ForeignKey(
         Softessay_Essay, 
-        on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        on_delete=models.SET_NULL,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -218,43 +212,3 @@ class Softessay_Body(models.Model):
             models.Index(fields=['updated_at']),
         ]
         db_table = 'softessay_body'
-
-
-class Softessay_Comment(models.Model):
-    id = models.UUIDField(
-        primary_key=True, 
-        default=uuid.uuid4, 
-        editable=False,
-    )
-    last_comment = models.ForeignKey(
-        'self', 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
-    comment = models.TextField()
-    body = models.ForeignKey(
-        Softessay_Body, 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
-    essay = models.ForeignKey(
-        Softessay_Essay, 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-    )
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['updated_at']),
-        ]
-        db_table = 'softessay_comment'
